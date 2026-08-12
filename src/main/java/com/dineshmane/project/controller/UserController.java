@@ -1,5 +1,6 @@
 package com.dineshmane.project.controller;
 
+import com.dineshmane.project.dto.UserDto;
 import com.dineshmane.project.entity.User;
 import com.dineshmane.project.service.UserService;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,8 @@ public class UserController {
     // build create user REST API
     // http://localhost:8080/api/users
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userService.createUser(user);
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+        UserDto savedUser = userService.createUser(userDto);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
@@ -28,26 +29,26 @@ public class UserController {
     // build get user by id REST API
     // http://localhost:8080/api/users/3
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long userId){
-        User user = userService.getUserById(userId);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long userId){
+        UserDto userDto = userService.getUserById(userId);
+        return ResponseEntity.ok(userDto);
     }
 
     // build get all users REST API
     // http://localhost:8080/api/users
     @GetMapping
-    public ResponseEntity<List<User>> getUsers(){
-        List<User> allUsers = userService.getAllUsers();
+    public ResponseEntity<List<UserDto>> getUsers(){
+        List<UserDto> allUsers = userService.getAllUsers();
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
     // build update user REST API
     // http://localhost:8080/api/users/3
     @PutMapping("{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long userId, @RequestBody User user) {
-        user.setId(userId);
-        User user1 = userService.updateUser(user);
-        return new ResponseEntity<>(user1, HttpStatus.CREATED);
+    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long userId, @RequestBody UserDto userDto) {
+        userDto.setId(userId);
+        UserDto UpdatedUserDto = userService.updateUser(userDto);
+        return new ResponseEntity<>(UpdatedUserDto, HttpStatus.CREATED);
     }
 
     // build delete user by id REST API
