@@ -2,6 +2,7 @@ package com.dineshmane.project.service.impl;
 
 import com.dineshmane.project.dto.UserDto;
 import com.dineshmane.project.entity.User;
+import com.dineshmane.project.mapper.AutoUserMapper;
 import com.dineshmane.project.mapper.UserMapper;
 import com.dineshmane.project.repository.UserRepository;
 import com.dineshmane.project.service.UserService;
@@ -27,13 +28,15 @@ public class UserServiceImpl implements UserService {
 
         // convert UserDto into User JPA entity
 //        User user = UserMapper.mapToUser(userDto);
-        User user = modelMapper.map(userDto, User.class);
+//        User user = modelMapper.map(userDto, User.class);
+        User user = AutoUserMapper.MAPPER.mapToUser(userDto);
 
         User userSaved =  userRepository.save(user);
 
         // convert User JPA entity into UserDto
 //        UserDto savedUserDto = UserMapper.mapToUserDto(userSaved);
-        UserDto savedUserDto = modelMapper.map(userSaved, UserDto.class);
+//        UserDto savedUserDto = modelMapper.map(userSaved, UserDto.class);
+        UserDto savedUserDto = AutoUserMapper.MAPPER.mapToUserDto(userSaved);
         return savedUserDto;
 
     }
@@ -45,7 +48,8 @@ public class UserServiceImpl implements UserService {
 
         // convert User JPA entity into UserDto
 //        UserDto userDto = UserMapper.mapToUserDto(user);
-        UserDto userDto = modelMapper.map(user, UserDto.class);
+//        UserDto userDto = modelMapper.map(user, UserDto.class);
+        UserDto userDto = AutoUserMapper.MAPPER.mapToUserDto(user);
         return userDto;
     }
 
@@ -62,7 +66,9 @@ public class UserServiceImpl implements UserService {
 
 //        return users.stream().map(UserMapper::mapToUserDto)
 //                .collect(Collectors.toList());
-        return users.stream().map(user -> modelMapper.map(user,UserDto.class))
+//        return users.stream().map(user -> modelMapper.map(user,UserDto.class))
+//                .collect(Collectors.toList());
+        return users.stream().map(user -> AutoUserMapper.MAPPER.mapToUserDto(user))
                 .collect(Collectors.toList());
     }
 
@@ -71,7 +77,8 @@ public class UserServiceImpl implements UserService {
 
         // convert UserDto into User JPA entity
 //        User user = UserMapper.mapToUser(userDto);
-        User user = modelMapper.map(userDto, User.class);
+//        User user = modelMapper.map(userDto, User.class);
+        User user = AutoUserMapper.MAPPER.mapToUser(userDto);
 
         User existingUser = userRepository.findById(user.getId()).get();
 
@@ -82,7 +89,8 @@ public class UserServiceImpl implements UserService {
 
         // convert User JPA entity into UserDto
 //        UserDto updatedUserDto = UserMapper.mapToUserDto(updatedUser);
-        UserDto updatedUserDto = modelMapper.map(updatedUser, UserDto.class);
+//        UserDto updatedUserDto = modelMapper.map(updatedUser, UserDto.class);
+        UserDto updatedUserDto = AutoUserMapper.MAPPER.mapToUserDto(updatedUser);
         return updatedUserDto;
     }
 
