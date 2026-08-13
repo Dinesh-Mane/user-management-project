@@ -6,6 +6,7 @@ import com.dineshmane.project.mapper.UserMapper;
 import com.dineshmane.project.repository.UserRepository;
 import com.dineshmane.project.service.UserService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,15 +20,20 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
+    private ModelMapper modelMapper;
+
     @Override
     public UserDto createUser(UserDto userDto) {
 
         // convert UserDto into User JPA entity
-        User user = UserMapper.mapToUser(userDto);
+//        User user = UserMapper.mapToUser(userDto);
+        User user = modelMapper.map(userDto, User.class);
+
         User userSaved =  userRepository.save(user);
 
         // convert User JPA entity into UserDto
-        UserDto savedUserDto = UserMapper.mapToUserDto(userSaved);
+//        UserDto savedUserDto = UserMapper.mapToUserDto(userSaved);
+        UserDto savedUserDto = modelMapper.map(userSaved, UserDto.class);
         return savedUserDto;
 
     }
@@ -38,7 +44,8 @@ public class UserServiceImpl implements UserService {
         User user = optionalUser.get();
 
         // convert User JPA entity into UserDto
-        UserDto userDto = UserMapper.mapToUserDto(user);
+//        UserDto userDto = UserMapper.mapToUserDto(user);
+        UserDto userDto = modelMapper.map(user, UserDto.class);
         return userDto;
     }
 
@@ -53,7 +60,9 @@ public class UserServiceImpl implements UserService {
 //        }
 //        return usersDto;
 
-        return users.stream().map(UserMapper::mapToUserDto)
+//        return users.stream().map(UserMapper::mapToUserDto)
+//                .collect(Collectors.toList());
+        return users.stream().map(user -> modelMapper.map(user,UserDto.class))
                 .collect(Collectors.toList());
     }
 
@@ -61,7 +70,8 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto userDto) {
 
         // convert UserDto into User JPA entity
-        User user = UserMapper.mapToUser(userDto);
+//        User user = UserMapper.mapToUser(userDto);
+        User user = modelMapper.map(userDto, User.class);
 
         User existingUser = userRepository.findById(user.getId()).get();
 
@@ -71,7 +81,8 @@ public class UserServiceImpl implements UserService {
         User updatedUser = userRepository.save(existingUser);
 
         // convert User JPA entity into UserDto
-        UserDto updatedUserDto = UserMapper.mapToUserDto(updatedUser);
+//        UserDto updatedUserDto = UserMapper.mapToUserDto(updatedUser);
+        UserDto updatedUserDto = modelMapper.map(updatedUser, UserDto.class);
         return updatedUserDto;
     }
 
