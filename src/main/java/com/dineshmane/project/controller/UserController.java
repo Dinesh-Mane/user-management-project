@@ -5,6 +5,7 @@ import com.dineshmane.project.entity.User;
 import com.dineshmane.project.exception.ErrorDetails;
 import com.dineshmane.project.exception.ResourceNotFoundException;
 import com.dineshmane.project.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class UserController {
     // build create user REST API
     // http://localhost:8080/api/users
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
         UserDto savedUser = userService.createUser(userDto);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
@@ -49,7 +50,7 @@ public class UserController {
     // build update user REST API
     // http://localhost:8080/api/users/3
     @PutMapping("{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long userId, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable("id") Long userId, @Valid @RequestBody UserDto userDto) {
         userDto.setId(userId);
         UserDto UpdatedUserDto = userService.updateUser(userDto);
         return new ResponseEntity<>(UpdatedUserDto, HttpStatus.CREATED);
