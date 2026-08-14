@@ -2,12 +2,16 @@ package com.dineshmane.project.controller;
 
 import com.dineshmane.project.dto.UserDto;
 import com.dineshmane.project.entity.User;
+import com.dineshmane.project.exception.ErrorDetails;
+import com.dineshmane.project.exception.ResourceNotFoundException;
 import com.dineshmane.project.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -58,4 +62,19 @@ public class UserController {
         userService.deleteUserById(userId);
         return new ResponseEntity<>("User Deleted!", HttpStatus.CREATED);
     }
+
+    // to handle specific exception
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ResourceNotFoundException exception, WebRequest webRequest){
+//
+//        ErrorDetails errorDetails = new ErrorDetails(
+//                LocalDateTime.now(),
+//                exception.getMessage(),
+//                webRequest.getDescription(false),
+//                "USER_NOT_FOUND"
+//        );
+//
+//        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+//
+//    }
 }

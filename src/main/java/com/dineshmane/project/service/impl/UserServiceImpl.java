@@ -2,6 +2,8 @@ package com.dineshmane.project.service.impl;
 
 import com.dineshmane.project.dto.UserDto;
 import com.dineshmane.project.entity.User;
+import com.dineshmane.project.exception.EmailAlreadyExistsException;
+import com.dineshmane.project.exception.ResourceNotFoundException;
 import com.dineshmane.project.mapper.AutoUserMapper;
 import com.dineshmane.project.mapper.UserMapper;
 import com.dineshmane.project.repository.UserRepository;
@@ -29,6 +31,13 @@ public class UserServiceImpl implements UserService {
         // convert UserDto into User JPA entity
 //        User user = UserMapper.mapToUser(userDto);
 //        User user = modelMapper.map(userDto, User.class);
+
+        // check if user with same email address already exists
+        Optional<User> optionalUser = userRepository.findUserByEmail(userDto.getEmail());
+        if (optionalUser.isPresent()){
+            throw new EmailAlreadyExistsException("Email Already Exists for User");
+        }
+
         User user = AutoUserMapper.MAPPER.mapToUser(userDto);
 
         User userSaved =  userRepository.save(user);
@@ -43,8 +52,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        User user = optionalUser.get();
+//        Optional<User> optionalUser = userRepository.findById(userId);
+//        User user = optionalUser.get();
+
+        // check if user exists
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", userId)
+        );
 
         // convert User JPA entity into UserDto
 //        UserDto userDto = UserMapper.mapToUserDto(user);
@@ -80,7 +94,11 @@ public class UserServiceImpl implements UserService {
 //        User user = modelMapper.map(userDto, User.class);
         User user = AutoUserMapper.MAPPER.mapToUser(userDto);
 
-        User existingUser = userRepository.findById(user.getId()).get();
+//        User existingUser = userRepository.findById(user.getId()).get();
+        // check if user exists
+        User existingUser = userRepository.findById(user.getId()).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", user.getId())
+        );
 
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
@@ -96,6 +114,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUserById(Long userId) {
+        // check if user exists
+        User existingUser = userRepository.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", userId)
+        );
+
         userRepository.deleteById(userId);
     }
 }
